@@ -18,7 +18,7 @@ public class donut{
         f.setMinimumSize(new Dimension(500, 500));
         f.setMaximumSize(new Dimension(500, 500));
         drawDonut d = new drawDonut();
-        //d.setDoubleBuffered(true);
+        d.setDoubleBuffered(false);
         f.add(d);
         f.setVisible(true);
         //donut variables
@@ -27,29 +27,7 @@ public class donut{
         double A = 0;
         double B = 0;
         while (true){
-            Graphics2D g = (Graphics2D) d.getGraphics();
-            g.setColor(Color.BLACK);
-            g.fillRect(0, 0, 500, 500);
-            g.setColor(Color.WHITE);
-            g.translate(250, 250);
-            //rotation math starts here
-            HashMap<Integer[], Integer> torus = new HashMap<>();
-            for (double i = 0; i < 361; i += 1){ //2d
-                for (double p = 0; p < 361; p += 1){ //3d
-                    Integer[] coords = 
-                        {Math.round((R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i)),
-                        Math.round((R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i))};
-                    float z = cos(A) * (R2 + R1 * cos(i)) * sin(p) + R1 * sin(A) * sin(i);
-                    if (torus.getOrDefault(coords, Integer.MIN_VALUE) < Math.round(z)){
-                        torus.put(coords, Math.round(z));
-                    }
-                }
-            }
-            //
-            for (Integer[] x: torus.keySet()){
-                g.drawString(".", x[0], x[1]);
-            }
-            d.update(g);
+            render(A, B, d, R1, R2);
             f.setVisible(true);
             // try {
             //     Thread.sleep(3000);
@@ -69,6 +47,37 @@ public class donut{
 	}
 
     public static class drawDonut extends JComponent{}
+
+    public static void render(double A, double B, drawDonut d, float R1, float R2){
+        Graphics2D g = (Graphics2D) d.getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, 500, 500);
+        g.setColor(Color.WHITE);
+        g.translate(250, 250);
+        //rotation math starts here
+        HashMap<Integer[], Integer> torus = new HashMap<>();
+        for (double i = 0; i < 361; i += 2){ //2d
+            for (double p = 0; p < 361; p += 2){ //3d
+                Integer[] coords = 
+                    {Math.round((R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i)),
+                    Math.round((R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i))};
+                int z = Math.round(cos(A) * (R2 + R1 * cos(i)) * sin(p) + R1 * sin(A) * sin(i));
+                if (torus.get(coords) != null){
+                    if (torus.get(coords) < z){
+                        torus.put(coords, z);
+                    } 
+                }
+                else{
+                    torus.put(coords, z);
+                }
+            }
+        }
+        //
+        for (Integer[] x: torus.keySet()){
+            g.drawString("@", x[0], x[1]);
+        }
+        d.update(g);
+    }
 
     public static float cos(double x){
         return (float) Math.cos(Math.toRadians(x));
