@@ -22,19 +22,20 @@ public class donut{
         f.add(d);
         f.setVisible(true);
         //donut variables
-        float R1 = 35; //circle radius
+        float R1 = 80;
+        //circle radius
         float R2 = 125; //x offset
         double A = 0;
         double B = 0;
         while (true){
             render(A, B, d, R1, R2);
             f.setVisible(true);
-            // try {
-            //     Thread.sleep(3000);
-            // }
-            // catch(Exception e){}
             A += 1;
             B += 1;
+            try {
+                Thread.sleep(1000);
+            }
+            catch(Exception e){}
         }
     }
 
@@ -60,21 +61,64 @@ public class donut{
             for (double p = 0; p < 361; p += 2){ //3d
                 Integer[] coords = 
                     {Math.round((R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i)),
-                    Math.round((R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i))};
-                int z = Math.round(cos(A) * (R2 + R1 * cos(i)) * sin(p) + R1 * sin(A) * sin(i));
-                if (torus.get(coords) != null){
-                    if (torus.get(coords) < z){
-                        torus.put(coords, z);
-                    } 
-                }
-                else{
-                    torus.put(coords, z);
-                }
+                    Math.round((R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i)),
+                    Math.round(cos(A) * (R2 + R1 * cos(i)) * sin(p) + R1 * sin(A) * sin(i))};
+                // int z = Math.round(cos(A) * (R2 + R1 * cos(i)) * sin(p) + R1 * sin(A) * sin(i));
+                int lumi = (int) (cos(p) * cos(i) * sin(B) - cos(A) * cos(i) * sin(p) - sin(A) * sin(i) + cos(B) * (cos(A) * sin(i) - cos(i) * sin(A) * sin(i)));
+                // if (torus.get(coords) != null){
+                //     System.out.println(" ");
+                //     if (torus.get(coords) < z){
+                //         System.out.print(torus.get(coords) + " ");
+                //         torus.put(coords, z);
+                //         System.out.println(torus.get(coords));
+                //     } 
+                // }
+                // else{
+                //     torus.put(coords, z);
+                // }
+                torus.put(coords, lumi * 8);
             }
         }
         //
         for (Integer[] x: torus.keySet()){
-            g.drawString("@", x[0], x[1]);
+            switch (torus.get(x)){
+                case 0:
+                g.drawString(".", x[0], x[1]);
+                break;
+                case 1:
+                g.drawString(",", x[0], x[1]);
+                break;
+                case 2:
+                g.drawString("-", x[0], x[1]);
+                break;
+                case 3:
+                g.drawString("~", x[0], x[1]);
+                break;
+                case 4:
+                g.drawString(":", x[0], x[1]);
+                break;
+                case 5:
+                g.drawString(";", x[0], x[1]);
+                break;
+                case 6:
+                g.drawString("=", x[0], x[1]);
+                break;
+                case 7:
+                g.drawString("!", x[0], x[1]);
+                break;
+                case 8:
+                g.drawString("*", x[0], x[1]);
+                break;
+                case 9:
+                g.drawString("#", x[0], x[1]);
+                break;
+                case 10:
+                g.drawString("$", x[0], x[1]);
+                break;
+                case 11:
+                g.drawString("@", x[0], x[1]);
+                break;
+            }
         }
         d.update(g);
     }
