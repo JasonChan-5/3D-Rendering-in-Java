@@ -17,7 +17,6 @@ public class donut{
         f.setMinimumSize(new Dimension(500, 500));
         f.setMaximumSize(new Dimension(500, 500));
         drawDonut d = new drawDonut();
-        d.setDoubleBuffered(false);
         f.add(d);
         f.setVisible(true);
         //donut variables
@@ -27,9 +26,14 @@ public class donut{
         double B = 0;
         while (true){
             render(A, B, d, R1, R2);
-            f.setVisible(true);
-            A += 1;
-            B += 1;
+            A += 3;
+            B += 3;
+            try{
+                Thread.sleep(100);
+            }
+            catch(Exception e){
+    
+            }
         }
     }
 
@@ -50,19 +54,12 @@ public class donut{
         g.setColor(Color.WHITE);
         g.translate(250, 250);
         //rotation math starts here
-        for (double i = 0; i < 361; i += 2){ //2d
-            for (double p = 0; p < 361; p += 2){ //3d
+        for (double i = 0; i < 361; i += 10){ //2d
+            for (double p = 0; p < 361; p += 5){ //3d
                 int x = Math.round((R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i));
                 int y = Math.round((R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i));
                 g.drawString(".", x, y);
             }
-        }
-        d.update(g);
-        try{
-            Thread.sleep(90);
-        }
-        catch(Exception e){
-
         }
     }
 
@@ -75,7 +72,3 @@ public class donut{
     }
 
 }
-//p = phi
-// (R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i) x
-// (R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i) y
-// cos(A) * (R2 + R1 * cos(i)) * sin(phi) + R1 * sin(A) * sin(i) 
