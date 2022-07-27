@@ -78,4 +78,4 @@ public class donut{
 //p = phi
 // (R2 + R1 * cos(i)) * (cos(B) * cos(p) + sin(A) * sin(B) * sin(p)) - R1 * cos(A) * sin(B) * sin(i) x
 // (R2 + R1 * cos(i)) * (cos(p) * sin(B) - cos(B) * sin(A) * sin(p)) + R1 * cos(A) * cos(B) * sin(i) y
-// cos(A) * (R2 + R1 * cos(i)) * sin(phi) + R1 * sin(A) * sin(i) z
+// cos(A) * (R2 + R1 * cos(i)) * sin(phi) + R1 * sin(A) * sin(i) 
